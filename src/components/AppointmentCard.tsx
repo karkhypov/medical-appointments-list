@@ -5,6 +5,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 interface AppointmentCardProps {
+  id: string;
   patientName: string;
   clinicianName: string;
   startDate: string;
@@ -13,14 +14,17 @@ interface AppointmentCardProps {
     time: string;
     greaterThanHour: boolean;
   };
+  handleClick: (arg0: string) => void;
 }
 
 const AppointmentCard = ({
+  id,
   patientName,
   clinicianName,
   startDate,
   startTime,
   duration,
+  handleClick,
 }: AppointmentCardProps) => {
   return (
     <Card sx={{ minWidth: 275, mb: '10px' }}>
@@ -47,7 +51,9 @@ const AppointmentCard = ({
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size='small'>Remove</Button>
+        <Button size='small' onClick={() => handleClick(id)}>
+          Remove
+        </Button>
       </CardActions>
     </Card>
   );
