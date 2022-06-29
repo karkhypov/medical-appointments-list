@@ -16,7 +16,7 @@ export const getDuration = (startDate: string, endDate: string) => {
       };
 };
 
-interface DataProps {
+export interface CardData {
   id: string;
   startDate: string;
   endDate: string;
@@ -25,7 +25,7 @@ interface DataProps {
   status: string;
 }
 
-export const sortByDate = (data: DataProps[]) =>
+export const sortByDate = (data: CardData[]) =>
   data.sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
 
 export const groupBy =

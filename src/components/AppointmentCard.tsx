@@ -27,7 +27,7 @@ const AppointmentCard = ({
   handleClick,
 }: AppointmentCardProps) => {
   return (
-    <Card sx={{ minWidth: 275, mb: '10px' }}>
+    <Card sx={{ minWidth: 275, m: 1 }}>
       <CardContent>
         <Typography sx={{ fontSize: 14 }} color='text.secondary' gutterBottom>
           Patient

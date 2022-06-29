@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
@@ -6,11 +6,17 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
-const SelectVariants = () => {
-  const [variant, setVariant] = useState('');
+interface SelectVariantsProps<T> {
+  value: T;
+  setValue: Dispatch<SetStateAction<T>>;
+}
 
+const SelectVariants = <T extends string>({
+  value,
+  setValue,
+}: SelectVariantsProps<T>) => {
   const handleChange = (event: SelectChangeEvent) => {
-    setVariant(event.target.value as string);
+    setValue(event.target.value as T);
   };
 
   return (
@@ -20,12 +26,13 @@ const SelectVariants = () => {
         <Select
           labelId='groupByLabel'
           id='groupBy'
-          value={variant}
+          value={value}
           label='Group by'
           onChange={handleChange}
         >
-          <MenuItem value={''}>None</MenuItem>
-          <MenuItem value={'appointmentDay'}>Appointment Day</MenuItem>
+          <MenuItem defaultChecked value={'startDate'}>
+            Appointment Day
+          </MenuItem>
           <MenuItem value={'clinicianName'}>Clinician Name</MenuItem>
         </Select>
       </FormControl>
