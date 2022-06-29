@@ -1,6 +1,13 @@
 import { useEffect, useState } from 'react';
 
-import { getDate, getDuration, getTime, sortByDate, groupBy } from './utils';
+import {
+  getDate,
+  getDuration,
+  getTime,
+  sortByAppointmentDate,
+  sortByClinicianName,
+  groupBy,
+} from './utils';
 
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -31,7 +38,7 @@ interface GroupedAppointmentCards {
   [key: string]: AppointmentCardData[];
 }
 
-export type SelectValue = 'startDate' | 'clinicianName';
+type SelectValue = 'startDate' | 'clinicianName';
 
 const App = () => {
   const [data, setData] = useState<AppointmentCardData[]>(Data);
@@ -42,11 +49,19 @@ const App = () => {
 
   useEffect(() => {
     const grouped = groupBy([groupByVariant]);
-    data && setAppointmentCards(grouped(data) as GroupedAppointmentCards);
+    const sorted =
+      groupByVariant === 'startDate'
+        ? sortByAppointmentDate(data)
+        : sortByClinicianName(data);
+    const result = grouped(sorted);
+
+    data && setAppointmentCards(result as GroupedAppointmentCards);
   }, [data, groupByVariant]);
 
   const removeCard = (id: string) => {
-    setData(data.filter((card: AppointmentCardData) => card.id !== id));
+    const filtered = data.filter((card: AppointmentCardData) => card.id !== id);
+
+    setData(filtered);
   };
 
   return (
@@ -72,8 +87,8 @@ const App = () => {
               groupByVariant === 'startDate' ? getDate(title) : title;
 
             return (
-              <CardGroup title={cardGroupTitle}>
-                {sortByDate(cards).map(
+              <CardGroup key={title} title={cardGroupTitle}>
+                {sortByAppointmentDate(cards).map(
                   ({
                     id,
                     patient: { name },
