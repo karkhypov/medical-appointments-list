@@ -13,27 +13,28 @@ import { getDate, getDuration, getTime, sortByDate, groupBy } from './utils';
 
 import Data from './data.json';
 
-import { CardData } from './utils';
-
+import { CardDataType } from './utils';
 export type SelectValue = 'startDate' | 'clinicianName';
 
 interface appointmentCardsProps {
-  [key: string]: CardData[];
+  [key: string]: CardDataType[];
 }
 
 const App = () => {
-  const [data, setData] = useState<CardData[]>(Data);
-  const [appointmentCards, setAppointmentCards] = useState<any>(null);
+  const [data, setData] = useState<CardDataType[]>(Data);
+  const [appointmentCards, setAppointmentCards] = useState<appointmentCardsProps | null>(
+    null
+  );
   const [groupByVariant, setGroupByVariant] = useState<SelectValue>('startDate');
   const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
     const grouped = groupBy([groupByVariant]);
-    data && setAppointmentCards(grouped(data));
+    data && setAppointmentCards(grouped(data) as appointmentCardsProps);
   }, [data, groupByVariant]);
 
   const removeCard = (id: string) => {
-    setData(data.filter((card: CardData) => card.id !== id));
+    setData(data.filter((card: CardDataType) => card.id !== id));
   };
 
   return (
@@ -67,7 +68,7 @@ const App = () => {
                     clinicianName,
                     startDate,
                     endDate,
-                  }: CardData) => {
+                  }: CardDataType) => {
                     return (
                       <AppointmentCard
                         key={id}
