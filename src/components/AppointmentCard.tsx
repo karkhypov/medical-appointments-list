@@ -44,7 +44,10 @@ const AppointmentCard = ({
         <Typography variant='body2'>
           Duration:{' '}
           {duration.greaterThanHour ? (
-            <span style={{ color: 'red' }}> {duration.time}</span>
+            <Typography variant='body2' component='span' style={{ color: 'red' }}>
+              {' '}
+              {duration.time}
+            </Typography>
           ) : (
             duration.time
           )}

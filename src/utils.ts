@@ -1,11 +1,11 @@
 import moment from 'moment';
 
-export const getDate = (date: string) => moment(new Date(date)).format('MM-DD');
+export const getDate = (date: string) => moment(date).format('MM-DD');
 
-export const getTime = (date: string) => moment(new Date(date)).format('hh:mm');
+export const getTime = (date: string) => moment(date).format('hh:mm');
 
 export const getDuration = (startDate: string, endDate: string) => {
-  const difference = moment(new Date(endDate)).diff(new Date(startDate), 'minutes');
+  const difference = moment(endDate).diff(startDate, 'minutes');
   const hours = difference / 60;
 
   return hours <= 1
@@ -16,16 +16,7 @@ export const getDuration = (startDate: string, endDate: string) => {
       };
 };
 
-export interface CardDataType {
-  id: string;
-  startDate: string;
-  endDate: string;
-  clinicianName: string;
-  patient: { id: string; name: string };
-  status: string;
-}
-
-export const sortByDate = (data: CardDataType[]) =>
+export const sortByDate = <T extends { startDate: string }>(data: T[]) =>
   data.sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
 
 export const groupBy =

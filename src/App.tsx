@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 
+import { getDate, getDuration, getTime, sortByDate, groupBy } from './utils';
+
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
@@ -9,32 +11,42 @@ import CreateCardModal from './components/CreateCardModal';
 import CardGroup from './components/CardGroup';
 import AppointmentCard from './components/AppointmentCard';
 
-import { getDate, getDuration, getTime, sortByDate, groupBy } from './utils';
-
 import Data from './data.json';
 
-import { CardDataType } from './utils';
-export type SelectValue = 'startDate' | 'clinicianName';
-
-interface appointmentCardsProps {
-  [key: string]: CardDataType[];
+interface Patient {
+  id: string;
+  name: string;
 }
 
+interface AppointmentCardData {
+  id: string;
+  startDate: string;
+  endDate: string;
+  clinicianName: string;
+  patient: Patient;
+  status: string;
+}
+
+interface GroupedAppointmentCards {
+  [key: string]: AppointmentCardData[];
+}
+
+export type SelectValue = 'startDate' | 'clinicianName';
+
 const App = () => {
-  const [data, setData] = useState<CardDataType[]>(Data);
-  const [appointmentCards, setAppointmentCards] = useState<appointmentCardsProps | null>(
-    null
-  );
+  const [data, setData] = useState<AppointmentCardData[]>(Data);
+  const [appointmentCards, setAppointmentCards] =
+    useState<GroupedAppointmentCards | null>(null);
   const [groupByVariant, setGroupByVariant] = useState<SelectValue>('startDate');
   const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
     const grouped = groupBy([groupByVariant]);
-    data && setAppointmentCards(grouped(data) as appointmentCardsProps);
+    data && setAppointmentCards(grouped(data) as GroupedAppointmentCards);
   }, [data, groupByVariant]);
 
   const removeCard = (id: string) => {
-    setData(data.filter((card: CardDataType) => card.id !== id));
+    setData(data.filter((card: AppointmentCardData) => card.id !== id));
   };
 
   return (
@@ -54,7 +66,7 @@ const App = () => {
       </Box>
 
       {appointmentCards &&
-        Object.entries(appointmentCards as appointmentCardsProps).map(
+        Object.entries(appointmentCards as GroupedAppointmentCards).map(
           ([title, cards]) => {
             const cardGroupTitle =
               groupByVariant === 'startDate' ? getDate(title) : title;
@@ -68,7 +80,7 @@ const App = () => {
                     clinicianName,
                     startDate,
                     endDate,
-                  }: CardDataType) => {
+                  }: AppointmentCardData) => {
                     return (
                       <AppointmentCard
                         key={id}
