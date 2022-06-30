@@ -1,11 +1,11 @@
-import moment from 'moment';
+import { format, differenceInMinutes } from 'date-fns';
 
-export const getDate = (date: string) => moment(new Date(date)).format('MM-DD');
+export const getDate = (date: string) => format(new Date(date), 'MM-dd');
 
-export const getTime = (date: string) => moment(new Date(date)).format('hh:mm');
+export const getTime = (date: string) => format(new Date(date), 'hh:mm');
 
 export const getDuration = (startDate: string, endDate: string) => {
-  const difference = moment(new Date(endDate)).diff(new Date(startDate), 'minutes');
+  const difference = differenceInMinutes(new Date(endDate), new Date(startDate));
   const hours = difference / 60;
 
   return hours <= 1
