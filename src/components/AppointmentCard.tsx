@@ -1,31 +1,24 @@
+import { getDate, getTime, getDuration } from '../utils';
+
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
+import { AppointmentCardData } from '../App';
+
 interface AppointmentCardProps {
-  id: string;
-  patientName: string;
-  clinicianName: string;
-  startDate: string;
-  startTime: string;
-  duration: {
-    time: string;
-    greaterThanHour: boolean;
-  };
+  card: AppointmentCardData;
   handleClick: (arg0: string) => void;
 }
 
-const AppointmentCard = ({
-  id,
-  patientName,
-  clinicianName,
-  startDate,
-  startTime,
-  duration,
-  handleClick,
-}: AppointmentCardProps) => {
+const AppointmentCard = ({ card, handleClick }: AppointmentCardProps) => {
+  const { id, patient, clinicianName, startDate, endDate } = card;
+  const date = getDate(startDate);
+  const time = getTime(startDate);
+  const duration = getDuration(startDate, endDate);
+
   return (
     <Card sx={{ minWidth: 275, m: 1 }}>
       <CardContent>
@@ -33,13 +26,13 @@ const AppointmentCard = ({
           Patient
         </Typography>
         <Typography variant='h5' component='div'>
-          {patientName}
+          {patient.name}
         </Typography>
         <Typography sx={{ mb: 1.5 }} color='text.secondary'>
           Clinician: {clinicianName}
         </Typography>
         <Typography variant='body2'>
-          Start Date: {startDate} {startTime}
+          Start Date: {date} {time}
         </Typography>
         <Typography variant='body2'>
           Duration:{' '}

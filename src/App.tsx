@@ -1,13 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useState, useLayoutEffect } from 'react';
 
-import {
-  getDate,
-  getDuration,
-  getTime,
-  sortByAppointmentDate,
-  sortByClinicianName,
-  groupBy,
-} from './utils';
+import { getDate, sortByAppointmentDate, sortByClinicianName, groupBy } from './utils';
 
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -25,7 +18,7 @@ interface Patient {
   name: string;
 }
 
-interface AppointmentCardData {
+export interface AppointmentCardData {
   id: string;
   startDate: string;
   endDate: string;
@@ -41,13 +34,13 @@ interface GroupedAppointmentCards {
 type SelectValue = 'startDate' | 'clinicianName';
 
 const App = () => {
-  const [data, setData] = useState<AppointmentCardData[]>(Data);
+  const data = Data;
   const [appointmentCards, setAppointmentCards] =
     useState<GroupedAppointmentCards | null>(null);
   const [groupByVariant, setGroupByVariant] = useState<SelectValue>('startDate');
   const [openModal, setOpenModal] = useState(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const grouped = groupBy([groupByVariant]);
     const sorted =
       groupByVariant === 'startDate'
@@ -55,13 +48,20 @@ const App = () => {
         : sortByClinicianName(data);
     const result = grouped(sorted);
 
-    data && setAppointmentCards(result as GroupedAppointmentCards);
+    setAppointmentCards(result as GroupedAppointmentCards);
   }, [data, groupByVariant]);
 
-  const removeCard = (id: string) => {
-    const filtered = data.filter((card: AppointmentCardData) => card.id !== id);
+  const removeCard = (title: string) => (id: string) => {
+    setAppointmentCards((prevState) => {
+      const result = {
+        ...prevState,
+        [title]: prevState?.[title].filter((card: AppointmentCardData) => card.id !== id),
+      } as GroupedAppointmentCards;
 
-    setData(filtered);
+      if (result[title].length === 0) delete result[title];
+
+      return result;
+    });
   };
 
   return (
@@ -88,28 +88,15 @@ const App = () => {
 
             return (
               <CardGroup key={title} title={cardGroupTitle}>
-                {sortByAppointmentDate(cards).map(
-                  ({
-                    id,
-                    patient: { name },
-                    clinicianName,
-                    startDate,
-                    endDate,
-                  }: AppointmentCardData) => {
-                    return (
-                      <AppointmentCard
-                        key={id}
-                        id={id}
-                        patientName={name}
-                        clinicianName={clinicianName}
-                        startDate={getDate(startDate)}
-                        startTime={getTime(startDate)}
-                        duration={getDuration(startDate, endDate)}
-                        handleClick={removeCard}
-                      />
-                    );
-                  }
-                )}
+                {sortByAppointmentDate(cards).map((card: AppointmentCardData) => {
+                  return (
+                    <AppointmentCard
+                      key={card.id}
+                      card={card}
+                      handleClick={removeCard(title)}
+                    />
+                  );
+                })}
               </CardGroup>
             );
           }
