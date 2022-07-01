@@ -1,4 +1,5 @@
 import { useState, useLayoutEffect } from 'react';
+import { isValid } from 'date-fns';
 
 import { getDate, sortByAppointmentDate, sortByClinicianName, groupBy } from './utils';
 
@@ -7,7 +8,7 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 
 import SelectVariants from './components/SelectVariants';
-import CreateCardModal from './components/CreateCardModal';
+import ModalLayout from './components/ModalLayout';
 import CardGroup from './components/CardGroup';
 import AppointmentCard from './components/AppointmentCard';
 
@@ -84,7 +85,9 @@ const App = () => {
         Object.entries(appointmentCards as GroupedAppointmentCards).map(
           ([title, cards]) => {
             const cardGroupTitle =
-              groupByVariant === 'startDate' ? getDate(title) : title;
+              groupByVariant === 'startDate' && isValid(new Date(title))
+                ? getDate(title)
+                : title;
 
             return (
               <CardGroup key={title} title={cardGroupTitle}>
@@ -102,7 +105,7 @@ const App = () => {
           }
         )}
 
-      <CreateCardModal open={openModal} setOpen={setOpenModal} />
+      <ModalLayout open={openModal} setOpen={setOpenModal} />
     </Container>
   );
 };
