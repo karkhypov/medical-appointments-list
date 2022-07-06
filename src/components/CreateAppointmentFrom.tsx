@@ -7,27 +7,19 @@ import { DateTimePicker } from '@mui/lab';
 import { TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import CustomInput from './CustomInput';
 
-interface FormInputs {
-  patient: string;
-  clinician: string;
-  startDate: string;
-  endDate: string;
-  status: boolean;
+import { FormInputs } from '../App';
+
+interface CreateAppointmentFormProps {
+  onSubmit: (arg0: FormInputs) => void;
 }
 
-const CreateAppointmentForm = () => {
+const CreateAppointmentForm = ({ onSubmit }: CreateAppointmentFormProps) => {
   const { register, handleSubmit, control } = useForm<FormInputs>();
-
-  const onSubmit = (data: FormInputs) => {
-    alert(JSON.stringify(data));
-  };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -45,7 +37,7 @@ const CreateAppointmentForm = () => {
           </Typography>
           <Box component='form' onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}>
             <CustomInput label='Patient' {...register('patient')} />
-            <CustomInput label='Clinician' {...register('clinician')} />
+            <CustomInput label='Clinician' {...register('clinicianName')} />
             <Controller
               control={control}
               name='startDate'
@@ -75,11 +67,6 @@ const CreateAppointmentForm = () => {
                   )}
                 />
               )}
-            />
-            <FormControlLabel
-              control={<Checkbox value='status' color='primary' />}
-              label='Active'
-              {...register('status')}
             />
             <Button type='submit' fullWidth variant='contained' sx={{ mt: 3 }}>
               Create Appointment

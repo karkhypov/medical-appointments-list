@@ -30,3 +30,5 @@ export const groupBy =
       objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
       return objectsByKeyValue;
     }, {} as Record<string, T[]>);
+
+export const randomID = () => Math.random().toString(36).slice(2, 12);

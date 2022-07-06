@@ -1,7 +1,13 @@
 import { useState, useLayoutEffect } from 'react';
 import { isValid } from 'date-fns';
 
-import { getDate, sortByAppointmentDate, sortByClinicianName, groupBy } from './utils';
+import {
+  getDate,
+  sortByAppointmentDate,
+  sortByClinicianName,
+  groupBy,
+  randomID,
+} from './utils';
 
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -35,6 +41,13 @@ interface GroupedAppointmentCards {
 
 type SelectValue = 'startDate' | 'clinicianName';
 
+export interface FormInputs {
+  patient: string;
+  clinicianName: string;
+  startDate: string;
+  endDate: string;
+}
+
 const App = () => {
   const data = Data;
   const [appointmentCards, setAppointmentCards] =
@@ -64,6 +77,33 @@ const App = () => {
 
       return result;
     });
+  };
+
+  const onSubmit = (data: FormInputs) => {
+    const title =
+      groupByVariant === 'startDate'
+        ? getDate(data[groupByVariant])
+        : data[groupByVariant];
+
+    const card = {
+      id: randomID(),
+      startDate: data.startDate,
+      endDate: data.endDate,
+      clinicianName: data.clinicianName,
+      patient: { id: randomID(), name: data.patient },
+      status: 'ACTIVE',
+    };
+
+    setAppointmentCards((prevState) => {
+      if (prevState) {
+        if (!prevState[title]) prevState[title] = [];
+        prevState[title].push(card);
+        return prevState;
+      }
+      return null;
+    });
+
+    setOpenModal(false);
   };
 
   return (
@@ -107,7 +147,7 @@ const App = () => {
         )}
 
       <ModalLayout open={openModal} setOpen={setOpenModal}>
-        <CreateAppointmentForm />
+        <CreateAppointmentForm onSubmit={(data) => onSubmit(data)} />
       </ModalLayout>
     </Container>
   );
