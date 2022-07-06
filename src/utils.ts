@@ -1,4 +1,4 @@
-import { format, differenceInMinutes } from 'date-fns';
+import { format, differenceInMinutes, isValid } from 'date-fns';
 
 export const getDate = (date: string) => format(new Date(date), 'MM-dd');
 
@@ -26,7 +26,8 @@ export const groupBy =
   <T>(keys: (keyof T)[]) =>
   (array: T[]): Record<string, T[]> =>
     array.reduce((objectsByKeyValue, obj) => {
-      const value = keys.map((key) => obj[key]).join('-');
+      let value = keys.map((key) => obj[key]).join('-');
+      value = isValid(new Date(value)) ? getDate(value) : value;
       objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
       return objectsByKeyValue;
     }, {} as Record<string, T[]>);
