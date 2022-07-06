@@ -2,7 +2,7 @@ import { forwardRef } from 'react';
 import TextField from '@mui/material/TextField';
 
 interface CustomInputProps {
-  label: string;
+  label?: string;
 }
 
 const CustomInput = forwardRef<HTMLInputElement, CustomInputProps>(

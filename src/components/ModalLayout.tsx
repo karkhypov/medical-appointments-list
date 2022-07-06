@@ -1,8 +1,7 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, PropsWithChildren, SetStateAction } from 'react';
 
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
-import CreateAppointmentForm from './CreateAppointmentFrom';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -21,7 +20,11 @@ interface ModalLayoutProps {
   setOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-const ModalLayout = ({ open, setOpen }: ModalLayoutProps) => {
+const ModalLayout = ({
+  children,
+  open,
+  setOpen,
+}: PropsWithChildren<ModalLayoutProps>) => {
   const handleClose = () => setOpen(false);
 
   return (
@@ -31,9 +34,7 @@ const ModalLayout = ({ open, setOpen }: ModalLayoutProps) => {
       aria-labelledby='create-appointment'
       aria-describedby='create-appointment'
     >
-      <Box sx={style}>
-        <CreateAppointmentForm />
-      </Box>
+      <Box sx={style}>{children}</Box>
     </Modal>
   );
 };

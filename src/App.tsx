@@ -8,9 +8,10 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 
 import SelectVariants from './components/SelectVariants';
-import ModalLayout from './components/ModalLayout';
 import CardGroup from './components/CardGroup';
 import AppointmentCard from './components/AppointmentCard';
+import ModalLayout from './components/ModalLayout';
+import CreateAppointmentForm from './components/CreateAppointmentFrom';
 
 import Data from './data.json';
 
@@ -105,7 +106,9 @@ const App = () => {
           }
         )}
 
-      <ModalLayout open={openModal} setOpen={setOpenModal} />
+      <ModalLayout open={openModal} setOpen={setOpenModal}>
+        <CreateAppointmentForm />
+      </ModalLayout>
     </Container>
   );
 };
