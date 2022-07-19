@@ -6,23 +6,14 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
-interface AppointmentCardCardProps {
-  id: string;
-  patient: { name: string };
-  clinicianName: string;
-  startDate: string;
-  endDate: string;
-}
+import { AppointmentCardData } from '../types';
 
-interface AppointmentCardProps<T> {
-  card: T;
+interface AppointmentCardProps {
+  card: AppointmentCardData;
   handleClick: (arg0: string) => void;
 }
 
-const AppointmentCard = <T extends AppointmentCardCardProps>({
-  card,
-  handleClick,
-}: AppointmentCardProps<T>) => {
+const AppointmentCard = ({ card, handleClick }: AppointmentCardProps) => {
   const { id, patient, clinicianName, startDate, endDate } = card;
   const date = getDate(startDate);
   const time = getTime(startDate);

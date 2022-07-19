@@ -21,32 +21,12 @@ import CreateAppointmentForm from './components/CreateAppointmentFrom';
 
 import Data from './data.json';
 
-interface Patient {
-  id: string;
-  name: string;
-}
-
-export interface AppointmentCardData {
-  id: string;
-  startDate: string;
-  endDate: string;
-  clinicianName: string;
-  patient: Patient;
-  status: string;
-}
-
-interface GroupedAppointmentCards {
-  [key: string]: AppointmentCardData[];
-}
-
-type SelectValue = 'startDate' | 'clinicianName';
-
-export interface FormInputs {
-  patient: string;
-  clinicianName: string;
-  startDate: string;
-  endDate: string;
-}
+import {
+  AppointmentCardData,
+  FormInputs,
+  GroupedAppointmentCards,
+  SelectValue,
+} from './types';
 
 const App = () => {
   const data = Data;

@@ -6,17 +6,16 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
-interface SelectVariantsProps<T> {
-  value: T;
-  setValue: Dispatch<SetStateAction<T>>;
+import { SelectValue } from '../types';
+
+interface SelectVariantsProps {
+  value: SelectValue;
+  setValue: Dispatch<SetStateAction<SelectValue>>;
 }
 
-const SelectVariants = <T extends string>({
-  value,
-  setValue,
-}: SelectVariantsProps<T>) => {
+const SelectVariants = ({ value, setValue }: SelectVariantsProps) => {
   const handleChange = (event: SelectChangeEvent) => {
-    setValue(event.target.value as T);
+    setValue(event.target.value as SelectValue);
   };
 
   return (

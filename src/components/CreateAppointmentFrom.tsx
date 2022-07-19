@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import CustomInput from './CustomInput';
 
-import { FormInputs } from '../App';
+import { FormInputs } from '../types';
 
 interface CreateAppointmentFormProps {
   onSubmit: (arg0: FormInputs) => void;
@@ -44,6 +44,7 @@ const CreateAppointmentForm = ({ onSubmit }: CreateAppointmentFormProps) => {
               defaultValue=''
               render={({ field }) => (
                 <DateTimePicker
+                  disablePast
                   label='Start Date and Time'
                   onChange={(startData) => field.onChange(startData)}
                   value={field.value || null}
